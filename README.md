@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./banner.jpeg" width="100%" alt="Danny Sequeira banner" />
+<img src="./banner.png" width="100%" alt="Danny Sequeira banner" />
 
 <br />
 
