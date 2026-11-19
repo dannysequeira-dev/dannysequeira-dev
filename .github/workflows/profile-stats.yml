@@ -1,0 +1,72 @@
+name: Refresh profile stats
+
+on:
+  # The cards are generated once a day instead of fetched on every profile view.
+  schedule:
+    - cron: "17 12 * * *"
+  workflow_dispatch:
+  # Generate the initial SVGs as soon as this workflow reaches main.
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/profile-stats.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-stats
+  cancel-in-progress: false
+
+jobs:
+  update-cards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out profile repository
+        uses: actions/checkout@v6
+
+      - name: Generate stats card
+        uses: stats-organization/github-readme-stats-action@2c498845f71017821efaad14293ebc736156ef21 # v2.1.0
+        with:
+          card: stats
+          options: username=${{ github.repository_owner }}&show_icons=true&hide_border=true&include_all_commits=true
+          path: profile/stats.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: "true"
+
+      - name: Generate most-used-languages card
+        uses: stats-organization/github-readme-stats-action@2c498845f71017821efaad14293ebc736156ef21 # v2.1.0
+        with:
+          card: top-langs
+          options: username=${{ github.repository_owner }}&layout=compact&hide_border=true&langs_count=8
+          path: profile/top-langs.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fail_on_error: "true"
+
+      - name: Validate cards
+        shell: bash
+        run: |
+          set -euo pipefail
+          for card in profile/stats.svg profile/top-langs.svg; do
+            test -s "$card"
+            grep -q '<svg' "$card"
+            if grep -Eiq 'Something went wrong|Could not fetch|Error Fetching' "$card"; then
+              echo "Invalid statistics card: $card"
+              exit 1
+            fi
+          done
+
+      - name: Commit updated cards
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/stats.svg profile/top-langs.svg
+          if git diff --cached --quiet; then
+            echo "Cards are already up to date."
+          else
+            git commit -m "chore: refresh GitHub profile cards"
+            git push
+          fi
