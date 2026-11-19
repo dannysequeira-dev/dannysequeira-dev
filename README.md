@@ -6,7 +6,9 @@
 
 # Danny Sequeira
 
-**Software Engineer · Java / Spring · TypeScript / React**
+### Software Engineering · Architecture · Systems
+
+**OPERATE · DESIGN · BUILD**
 
 Building domain-heavy systems, thoughtful interfaces, and developer tools that are designed to last.
 
