@@ -204,9 +204,9 @@ Topics usually include **architecture, microservices, networking, infrastructure
 
 <div align="center">
 
-<img height="180" src="https://github-readme-stats.vercel.app/api?username=dannysequeira-dev&show_icons=true&hide_border=true&include_all_commits=true&count_private=true" alt="Danny Sequeira GitHub stats" />
+<img height="180" src="./profile/stats.svg" alt="Danny Sequeira GitHub stats" />
 
-<img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=dannysequeira-dev&layout=compact&hide_border=true&langs_count=8" alt="Danny Sequeira most used languages" />
+<img height="180" src="./profile/top-langs.svg" alt="Danny Sequeira most used languages" />
 
 <br />
 
